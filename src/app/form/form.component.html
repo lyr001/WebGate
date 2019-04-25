@@ -1,0 +1,61 @@
+<div style="padding-left: 20px;">
+  <li *ngFor="let key of getKeys(item)">
+    <!--<label [ngSwitch]="getType(item[key])">   -->
+      <!--{{key}}:-->
+      <!--<input *ngSwitchCase="'[object String]'"-->
+             <!--type="string" [(ngModel)]="item[key]" >-->
+      <!--<input *ngSwitchCase="'[object Number]'"-->
+             <!--type="number" [(ngModel)]="item[key]" >-->
+      <!--<input *ngSwitchCase="'[object Boolean]'"-->
+             <!--type="checkbox" [(ngModel)]="item[key]" >-->
+      <!--<span *ngSwitchCase="'[object Array]'">-->
+        <!--<span *ngFor="let element of item[key]" [ngSwitch]="getType(element)" >-->
+          <!--<input *ngSwitchCase="'[object String]'"-->
+                 <!--type="string" [(ngModel)]="element" >-->
+          <!--<input *ngSwitchCase="'[object Number]'"-->
+                 <!--type="number" [(ngModel)]="element" >-->
+          <!--<input *ngSwitchCase="'[object Boolean]'"-->
+                 <!--type="checkbox" [(ngModel)]="element" >-->
+          <!--<app-form *ngSwitchCase="'[object Object]'" [item]="element"></app-form>-->
+        <!--</span>-->
+      <!--</span>-->
+      <!--<app-form *ngSwitchCase="'[object Object]'" [item]="item[key]"></app-form>-->
+      <!--<app-select-subclass *ngSwitchCase="'[object Undefined]'"-->
+                           <!--[name]="key" (outputitem)="item[key]=getOutputItem($event)"></app-select-subclass>-->
+    <!--</label>-->
+    <label [ngSwitch]="getType(item.input_type(key))">
+      {{key}}:
+      <span *ngSwitchCase="'[object String]'">
+        <label [ngSwitch]="item.input_type(key)">
+          <input *ngSwitchCase="'string'" type="text" [(ngModel)]="item[key]">
+          <input *ngSwitchCase="'number'" type="number" [(ngModel)]="item[key]">
+          <input *ngSwitchCase="'boolean'" type="checkbox" [(ngModel)]="item[key]">
+          <app-form *ngSwitchDefault [item]="item[key]"></app-form>
+        </label>
+      </span>
+      <span *ngSwitchCase="'[object Array]'">
+        <span *ngFor="let element of item.input_type(key); let i = index">
+          <label [ngSwitch]="element">
+            <input *ngSwitchCase="'string'" type="text" [(ngModel)]="item[key][i]">
+            <input *ngSwitchCase="'number'" type="number" [(ngModel)]="item[key][i]">
+            <input *ngSwitchCase="'boolean'" type="checkbox" [(ngModel)]="item[key][i]">
+            <app-form *ngSwitchDefault [item]="item[key][i]"></app-form>
+          </label>
+        </span>
+      </span>
+      <span *ngSwitchCase="'[object Object]'">
+        <select [(ngModel)]="subclass" (ngModelChange)="item.choose_subclass(key, $event)">
+          <option *ngFor="let element of getSubclass(item.input_type(key))" value="{{element}}">{{element}}</option>
+        </select>
+        <span [ngSwitch]="subclass">
+          <input *ngSwitchCase="'string'" type="text" [(ngModel)]="item[key]">
+          <input *ngSwitchCase="'number'" type="number" [(ngModel)]="item[key]">
+          <input *ngSwitchCase="'boolean'" type="checkbox" [(ngModel)]="item[key]">
+          <span *ngSwitchDefault>
+            <app-form *ngIf="item[key]!=undefined" [item]="item[key]"></app-form>
+          </span>
+        </span>
+      </span>
+    </label>
+  </li>
+</div>

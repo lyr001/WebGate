@@ -1,0 +1,24 @@
+<select [(ngModel)]="subclassName" (ngModelChange)="chooseSubclass($event)">
+  <option *ngFor="let element of judgeClass()" value="{{element}}">{{element}}</option>
+</select>
+<!--<app-form *ngIf="getType(item)=='[object Object]'" [item]="item"></app-form>-->
+<label [ngSwitch]="getType(item)">
+  <input *ngSwitchCase="'[object String]'"
+         type="string" [(ngModel)]="item" >
+  <input *ngSwitchCase="'[object Number]'"
+         type="number" [(ngModel)]="item" >
+  <input *ngSwitchCase="'[object Boolean]'"
+         type="checkbox" [(ngModel)]="item" >
+  <span *ngSwitchCase="'[object Array]'">
+        <span *ngFor="let element of item" [ngSwitch]="getType(element)" >
+          <input *ngSwitchCase="'[object String]'"
+                 type="string" [(ngModel)]="element" >
+          <input *ngSwitchCase="'[object Number]'"
+                 type="number" [(ngModel)]="element" >
+          <input *ngSwitchCase="'[object Boolean]'"
+                 type="checkbox" [(ngModel)]="element" >
+          <app-form *ngSwitchCase="'[object Object]'" [item]="element"></app-form>
+        </span>
+      </span>
+  <app-form *ngSwitchCase="'[object Object]'" [item]="item"></app-form>
+</label>
